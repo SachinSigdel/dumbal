@@ -1,4 +1,4 @@
-from random import shuffle
+from random import shuffle,randint
 
 class Dumbal:
     # initializing all the cards according to their types and storing them in list
@@ -29,37 +29,63 @@ class Dumbal:
         function to initialize the game. 
         creates two players with 5 cards from the deck 
         """
-        # print(self.deck)
-        player1 = []
-        player2 = []
-        player3 = []
-        player4 = []
-        player5 = []
+        player = []
+        bot1 = []
+        bot2 = []
+        bot3 = []
+        bot4 = []
         for _ in range(5):
             # assigning cards to the players
-            player1.append(self.deck.pop(0))
-            player2.append(self.deck.pop(0))
-            player3.append(self.deck.pop(0))
-            player4.append(self.deck.pop(0))
-            player5.append(self.deck.pop(0))
-        # print("Player 1:",player1)
-        print("Player 2:",player2)
-        # print("Player 3:",player3)
-        # print("Player 4:",player4)
-        # print("Player 5:",player5)
-        # print("Deck after:",self.deck)
+            player.append(self.deck.pop(0))
+            bot1.append(self.deck.pop(0))
+            bot2.append(self.deck.pop(0))
+            bot3.append(self.deck.pop(0))
+            bot4.append(self.deck.pop(0))
+
+        print('-'*40)
+        print("Your cards in hand:")
+        for each in player: print(each, end="\t")
+        print('\n'+'-'*40)
+
         play_continue = True
         while play_continue == True:
-            throw = input("Do you want to throw?(y/n)")
-            if throw.strip() == "y":
-                self.throw_card(1,player2)
-            elif throw.strip() == "n":
-                self.complete_game
-                break
-        
-        self.pick_card(player2)
-        self.complete_game(player2)
-        print(player2)
+            throw = int(input("\nProvide index of the card you want to throw: "))
+            if throw <= len(player):
+                self.throw_card(throw,player)
+            else:
+                print("Invalid card!")
+            for each in player: print(each, end="\t")
+
+            print(f"\nYou picked: {self.pick_card(player)}")
+
+            # bots' playing turns, throw at random and pick 
+            self.throw_card(randint(0,len(bot1)),bot1)
+            self.pick_card(bot1)
+            for each in bot1: print(each, end="\t")
+            print('\n')
+
+            self.throw_card(randint(0,len(bot2)),bot2)
+            self.pick_card(bot2)
+            for each in bot2: print(each, end="\t")
+            print('\n')
+
+            self.throw_card(randint(0,len(bot3)),bot3)
+            self.pick_card(bot3)
+            for each in bot3: print(each, end="\t")
+            print('\n')
+
+            self.throw_card(randint(0,len(bot4)),bot4)
+            self.pick_card(bot4)
+            for each in bot4: print(each, end="\t")
+            print('\n')
+
+            complete = input("Do you want to complete the game?(y/n)")
+            if complete.strip().lower() == 'y':
+                self.complete_game(player)
+            elif complete.strip().lower() == 'n':
+                continue
+            else:
+                print("Invalid input.")
     
     def pick_card(self, player_cards):
         """
@@ -67,6 +93,7 @@ class Dumbal:
         """
         picked_card = self.deck.pop(0)
         player_cards.append(picked_card)
+        return picked_card
 
     def throw_card(self, i, player_cards):
         """
@@ -119,6 +146,8 @@ class Dumbal:
                 total_in_hand += int(player_cards[i][:-1])
 
         if total_in_hand <= 10:
-            print("You have:", total_in_hand,"You've won the game!")
+            print(f"You have: {total_in_hand}, You've won the game!")
+        else:
+            print(f"You have: { total_in_hand }, You're not eligible to complete the game!")
 
 Dumbal()
