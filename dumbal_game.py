@@ -7,8 +7,7 @@ screen = pygame.display.set_mode((1000,500))
 pygame.display.set_caption("Dumbal")
 clock = pygame.time.Clock()
 
-test_surface = pygame.Surface((600,300))
-test_surface.fill('White')
+floor = pygame.image.load("./images/board.jpg")
 
 while True:
     for event in pygame.event.get():
@@ -16,7 +15,7 @@ while True:
             pygame.quit() #exits the game
             exit() #exits the python program completely
 
-    screen.blit(test_surface,(200,100))
+    screen.blit(floor,(0,0))
 
     pygame.display.update() #updates the screen after every move
     clock.tick(60)

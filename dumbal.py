@@ -36,6 +36,7 @@ class Dumbal:
         player4 = []
         player5 = []
         for _ in range(5):
+            # assigning cards to the players
             player1.append(self.deck.pop(0))
             player2.append(self.deck.pop(0))
             player3.append(self.deck.pop(0))
@@ -47,7 +48,15 @@ class Dumbal:
         # print("Player 4:",player4)
         # print("Player 5:",player5)
         # print("Deck after:",self.deck)
-        self.throw_card(1,player2)
+        play_continue = True
+        while play_continue == True:
+            throw = input("Do you want to throw?(y/n)")
+            if throw.strip() == "y":
+                self.throw_card(1,player2)
+            elif throw.strip() == "n":
+                self.complete_game
+                break
+        
         self.pick_card(player2)
         self.complete_game(player2)
         print(player2)
@@ -68,7 +77,7 @@ class Dumbal:
             selected_card = player_cards[i]
             selected_value = selected_card[:-1]
 
-            # Find all cards with the same value
+            # if there are similar cards in hand 
             duplicates = [card for card in player_cards if card[:-1] == selected_value]
 
             # alternate method to find duplicates
@@ -79,7 +88,7 @@ class Dumbal:
             # print("Duplicates:",duplicates)
 
             if len(duplicates) > 1:
-                # Throw all duplicates to the floor
+                # throw to floor
                 for card in duplicates:
                     self.floor.append(card)
                     player_cards.remove(card)
@@ -92,10 +101,12 @@ class Dumbal:
             print("Floor:", self.floor) 
     
     def complete_game(self, player_cards):
+        # if total in hand of a player is less than 10, the player wins the game.
         total_in_hand = 0
+        # calcutating sum of all cards of the player's hand
         for i in range(len(player_cards)):
             num_value = player_cards[i][:-1]
-
+            # assigning values to Alphabet cards.
             if num_value == 'A':
                 total_in_hand += 1
             elif num_value == 'J':
@@ -107,7 +118,7 @@ class Dumbal:
             else:
                 total_in_hand += int(player_cards[i][:-1])
 
-        if total_in_hand <= 52: #testing
-            print("You've won the game! You have:", total_in_hand)
+        if total_in_hand <= 10:
+            print("You have:", total_in_hand,"You've won the game!")
 
 Dumbal()
