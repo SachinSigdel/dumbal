@@ -15,19 +15,18 @@ class Dumbal:
         self.game()
 
     def create_deck(self):
-        """ function to create deck using all the cards """
+        """ function: create deck using all the cards """
         self.deck.extend(self.diamonds + self.clubs + self.hearts + self.spades)
 
     def shuffle_deck(self):
-        """ function to shuffle deck """
+        """ function: shuffle deck """
         shuffle(self.deck)
         # for i in range(len(self.deck)): could be done this way as well
             # self.deck[i] = self.deck[randint(0,51)]
 
     def game(self):
         """ 
-        function to initialize the game. 
-        creates two players with 5 cards from the deck 
+        function: initialize the game and create two players with 5 cards from the deck 
         """
         player = []
         bot1 = []
@@ -42,10 +41,10 @@ class Dumbal:
             bot3.append(self.deck.pop(0))
             bot4.append(self.deck.pop(0))
 
-        print('-'*40)
-        print("Your cards in hand:")
+        print('-'*45)
+        print("Hand: ",end='\t')
         for each in player: print(each, end="\t")
-        print('\n'+'-'*40)
+        print('\n'+'-'*45)
 
         play_continue = True
         while play_continue == True:
@@ -54,34 +53,56 @@ class Dumbal:
                 self.throw_card(throw,player)
             else:
                 print("Invalid card!")
-            for each in player: print(each, end="\t")
 
             print(f"\nYou picked: {self.pick_card(player)}")
+            print('\n'+'-'*45)
+            print("Your Hand: ",end='\t')
+            for each in player: print(each, end="\t")
+            print('\n'+'-'*45)
 
             # bots' playing turns, throw at random and pick 
-            self.throw_card(randint(0,len(bot1)),bot1)
+            self.throw_card(randint(0,len(bot1)-1),bot1)
             self.pick_card(bot1)
+            print("Bot1's Hand: ",end='\t')
             for each in bot1: print(each, end="\t")
-            print('\n')
+            if self.complete_game(bot1) <= 10:
+                print("\nBot1 has won the game.")
+                play_continue = False
 
-            self.throw_card(randint(0,len(bot2)),bot2)
+            self.throw_card(randint(0,len(bot1)-1),bot2)
             self.pick_card(bot2)
+            print("Bot2's Hand: ",end='\t')
             for each in bot2: print(each, end="\t")
-            print('\n')
+            if self.complete_game(bot2) <= 10:
+                print("\nBot1 has won the game.")
+                play_continue = False
 
-            self.throw_card(randint(0,len(bot3)),bot3)
+            self.throw_card(randint(0,len(bot1)-1),bot3)
             self.pick_card(bot3)
+            print("Bot3's Hand: ",end='\t')
             for each in bot3: print(each, end="\t")
-            print('\n')
+            if self.complete_game(bot3) <= 10:
+                print("\nBot1 has won the game.")
+                play_continue = False
 
-            self.throw_card(randint(0,len(bot4)),bot4)
+            self.throw_card(randint(0,len(bot1)-1),bot4)
             self.pick_card(bot4)
+            print("Bot4's Hand: ",end='\t')
             for each in bot4: print(each, end="\t")
-            print('\n')
+            if self.complete_game(bot4) <= 10:
+                print("\nBot1 has won the game.")
+                play_continue = False
+
+
+            print("\nFloor:", self.floor) 
 
             complete = input("Do you want to complete the game?(y/n)")
             if complete.strip().lower() == 'y':
-                self.complete_game(player)
+                if self.complete_game(player) <= 10:
+                    print("You have won the game!")
+                else:
+                    print("Not eligible to end the game!")
+                play_continue = False
             elif complete.strip().lower() == 'n':
                 continue
             else:
@@ -89,7 +110,7 @@ class Dumbal:
     
     def pick_card(self, player_cards):
         """
-        function to let players pick card from their hand
+        function: let players pick card from their hand
         """
         picked_card = self.deck.pop(0)
         player_cards.append(picked_card)
@@ -97,7 +118,7 @@ class Dumbal:
 
     def throw_card(self, i, player_cards):
         """
-        function to let players throw cards from their hand
+        function: let players throw cards from their hand
         """
 
         if 0 <= i < len(player_cards):
@@ -119,16 +140,16 @@ class Dumbal:
                 for card in duplicates:
                     self.floor.append(card)
                     player_cards.remove(card)
-                print(f"Thrown duplicates: {duplicates}")
+                # print(f"Thrown duplicates: {duplicates}")
             else:
                 # Throw just the selected card
                 self.floor.append(player_cards.pop(i))
-                print(f"Thrown single card: {selected_card}")
-
-            print("Floor:", self.floor) 
+                # print(f"Thrown single card: {selected_card}")
     
     def complete_game(self, player_cards):
-        # if total in hand of a player is less than 10, the player wins the game.
+        """
+        function: if total in hand of a player is less than 10, the player wins the game.
+        """
         total_in_hand = 0
         # calcutating sum of all cards of the player's hand
         for i in range(len(player_cards)):
@@ -144,10 +165,11 @@ class Dumbal:
                 total_in_hand += 13
             else:
                 total_in_hand += int(player_cards[i][:-1])
+        return total_in_hand
 
-        if total_in_hand <= 10:
-            print(f"You have: {total_in_hand}, You've won the game!")
-        else:
-            print(f"You have: { total_in_hand }, You're not eligible to complete the game!")
+        # if total_in_hand <= 10:
+        #     print(f"You have: {total_in_hand}, You've won the game!")
+        # else:
+        #     print(f"You have: { total_in_hand }, You're not eligible to complete the game!")
 
 Dumbal()
