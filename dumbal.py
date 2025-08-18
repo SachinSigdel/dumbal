@@ -1,4 +1,5 @@
 from random import shuffle,randint
+import time
 
 class Dumbal:
     # initializing all the cards according to their types and storing them in list
@@ -56,7 +57,7 @@ class Dumbal:
                     print("Invalid card!")
                     continue
             except ValueError:
-                print("\n Please provide a valid card!")
+                print("\nPlease provide a valid card!")
                 continue
 
             print(f"\nYou picked: {self.pick_card(player)}")
@@ -69,7 +70,7 @@ class Dumbal:
             if complete.strip().lower() == 'y':
                 if self.return_total(player) <= 10:
                     print("You have won the game!")
-                    self.play_continue = False
+                    break
                 else:
                     print("Not eligible to end the game!")
                     continue
@@ -79,11 +80,13 @@ class Dumbal:
                 print("Invalid input.")
                 continue
 
+            print("Bot's turn...")
+            time.sleep(2)
             # bots' playing turns, throw at random and pick
-            self.bot_game(bot1)
-            self.bot_game(bot2)
-            self.bot_game(bot3)
-            self.bot_game(bot4)
+            self.bot_game(bot1, "Bot1")
+            self.bot_game(bot2, "Bot2")
+            self.bot_game(bot3, "Bot3")
+            self.bot_game(bot4, "Bot4")
 
             print("\nFloor:", self.floor)
     
@@ -91,14 +94,14 @@ class Dumbal:
         """
         function: let players pick card from their hand
         """
-        picked_card = self.deck.pop(0)
-        if self.deck:
-            player_cards.append(picked_card)
-        else:
+        if not self.deck:
             self.deck.extend(self.floor)
             self.floor.clear()
             print("Deck recreated using cards in floor!")
             self.shuffle_deck()
+
+        picked_card = self.deck.pop(0)
+        player_cards.append(picked_card)
         return picked_card
 
     def throw_card(self, i, player_cards):
@@ -128,13 +131,13 @@ class Dumbal:
                 # Throw just the selected card
                 self.floor.append(player_cards.pop(i))
 
-    def bot_game(self, bot):
+    def bot_game(self, bot, bot_name):
         self.throw_card(randint(0, len(bot) - 1), bot)
         self.pick_card(bot)
-        print("\nBot's Hand: ", end='\t')
-        for each in bot: print(each, end="\t")
+        # print("\nBot's Hand: ", end='\t')
+        # for each in bot: print(each, end="\t")
         if self.return_total(bot) <= 10:
-            print("\nBot has won the game.")
+            print(f"\n {bot_name} has won the game.")
             self.play_continue = False
 
     def return_total(self, player_cards):
