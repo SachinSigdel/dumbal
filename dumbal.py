@@ -68,7 +68,7 @@ class Dumbal:
 
             complete = input("Do you want to complete the game?(y/n)")
             if complete.strip().lower() == 'y':
-                if self.return_total(player) <= 10:
+                if self.return_total(player) <= 15:
                     print("You have won the game!")
                     break
                 else:
@@ -136,7 +136,7 @@ class Dumbal:
         self.pick_card(bot)
         # print("\nBot's Hand: ", end='\t')
         # for each in bot: print(each, end="\t")
-        if self.return_total(bot) <= 10:
+        if self.return_total(bot) <= 15:
             print(f"\n {bot_name} has won the game.")
             self.play_continue = False
 
