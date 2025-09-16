@@ -28,7 +28,7 @@ class Dumbal:
 
     def game(self):
         """ 
-        function: initialize the game and create two players with 5 cards from the deck 
+        function: initialize the game and create players with 5 cards from the deck
         """
         player = []
         bot1 = []
@@ -92,16 +92,38 @@ class Dumbal:
     
     def pick_card(self, player_cards):
         """
-        function: let players pick card from their hand
+        function: let players pick card for their hand
         """
+        picked_card = ''
         if not self.deck:
             self.deck.extend(self.floor)
             self.floor.clear()
             print("Deck recreated using cards in floor!")
             self.shuffle_deck()
 
+        choice = input("Do you want to pick from floor?(y/n)")
+        if choice.strip().lower() == 'y' and self.floor:
+            picked_card = self.floor.pop(-2)
+            player_cards.append(picked_card)
+        elif choice.strip().lower() == 'n':
+            picked_card = self.deck.pop(0)
+            player_cards.append(picked_card)
+        else:
+            print("Invalid input.")
+        return picked_card
+
+    def bot_pick(self, bot_cards):
+        """
+        function: to let bot pick card from deck but not from floor
+        """
+        picked_card = ''
+        if not self.deck:
+            self.deck.extend(self.floor)
+            self.floor.clear()
+            print("Deck recreated using cards in floor!")
+            self.shuffle_deck()
         picked_card = self.deck.pop(0)
-        player_cards.append(picked_card)
+        bot_cards.append(picked_card)
         return picked_card
 
     def throw_card(self, i, player_cards):
@@ -133,7 +155,7 @@ class Dumbal:
 
     def bot_game(self, bot, bot_name):
         self.throw_card(randint(0, len(bot) - 1), bot)
-        self.pick_card(bot)
+        self.bot_pick(bot)
         # print("\nBot's Hand: ", end='\t')
         # for each in bot: print(each, end="\t")
         if self.return_total(bot) <= 15:
